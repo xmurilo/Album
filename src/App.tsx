@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import SearchBar from "./components/SearchBar";
-import ListPhotos from "./components/ListPhotos";
+import ListPhotos, { PhotoData } from "./components/ListPhotos";
 import AmplifiedPhoto from "./components/AmplifiedPhoto";
 import axios from "axios";
 
@@ -9,6 +9,7 @@ function App() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("");
   const [photos, setPhotos] = useState([]);
+  const [amplifiedPhoto, setAmplifiedPhoto] = useState<PhotoData | null>(null);
 
   const fetchData = async ({ query, category }: { query: string; category: string }) => {
     const apiKey = import.meta.env.VITE_UNSPLASH_API_KEY;
@@ -28,9 +29,11 @@ function App() {
 
   return (
     <div className="container">
-      <SearchBar />
-      <ListPhotos photos={photos} />
-      <AmplifiedPhoto />
+      <SearchBar setQuery={setQuery} setCategory={setCategory} />
+      <ListPhotos photos={photos} setAmplifiedPhoto={setAmplifiedPhoto} />
+      {amplifiedPhoto && (
+        <AmplifiedPhoto photo={amplifiedPhoto} setPhotoAmplified={setAmplifiedPhoto} />
+      )}
     </div>
   );
 }
